@@ -1,7 +1,9 @@
+import MessengerRouter from './router';
+
 function App() {
   return (
     <div>
-      React Messanger
+      <MessengerRouter />
     </div>
   );
 }

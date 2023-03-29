@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import styled from 'styled-components';
 import useInput from '../hooks/useInput';
 
@@ -27,10 +27,21 @@ const Messenger = () => {
     setCurUserId(otherUserId);
   };
 
-  console.log('messageStorage', messageStorage);
+  const scrollToBottom = () => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+    }
+  };
 
-  console.log('curUserId', curUserId);
-  console.log('otherUserId', otherUserId);
+  useEffect(() => {
+    scrollToBottom();
+  }, [messageStorage]);
+
+  // console.log('messageStorage', messageStorage);
+  // console.log('curUserId', curUserId);
+  // console.log('otherUserId', otherUserId);
+
+  const scrollRef = useRef<null | HTMLDivElement>(null);
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
@@ -56,7 +67,7 @@ const Messenger = () => {
       <button type="button" onClick={handleUserToggle}>
         유저 토글
       </button>
-      <MessageContainer>
+      <MessageContainer ref={scrollRef}>
         {/* 채팅 내역 쌓이는 컴포넌트 */}
         {messageStorage &&
           messageStorage.map((message, idx) => (

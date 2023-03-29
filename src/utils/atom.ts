@@ -9,3 +9,8 @@ export const userInfo = atom<UserInfoType>({
     // profileImg: null,
   },
 });
+
+export const userGroup = atom<UserInfoType[]>({
+  key: 'userGroup',
+  default: [],
+});

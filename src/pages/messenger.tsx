@@ -67,7 +67,7 @@ const Messenger = () => {
           ))}
       </MessageContainer>
       <form onSubmit={handleSubmit}>
-        <input type="text" onChange={input.onChange} />
+        <input type="text" onChange={input.onChange} autoFocus />
         <button type="submit">전송</button>
       </form>
     </div>
@@ -87,5 +87,6 @@ const MessageContainer = styled.div`
 
 const Message = styled.div<{ curUser: boolean }>`
   display: flex;
-  justify-content: ${({ curUser }) => (curUser ? 'flex-end' : 'flex-start')};
+  flex-direction: ${({ curUser }) => (curUser ? 'row-reverse' : 'row')};
+  // justify-content: ${({ curUser }) => (curUser ? 'flex-end' : 'flex-start')};
 `;

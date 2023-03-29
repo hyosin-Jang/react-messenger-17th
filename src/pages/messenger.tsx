@@ -20,7 +20,17 @@ const Messenger = () => {
 
   const input = useInput('');
 
+  // 내 아이디 <-> 상대 아이디
+  const handleUserToggle = (e: any) => {
+    e.preventDefault();
+    setOtherUserId(curUserId);
+    setCurUserId(otherUserId);
+  };
+
   console.log('messageStorage', messageStorage);
+
+  console.log('curUserId', curUserId);
+  console.log('otherUserId', otherUserId);
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
@@ -43,6 +53,9 @@ const Messenger = () => {
   return (
     <div>
       <h1>채팅</h1>
+      <button type="button" onClick={handleUserToggle}>
+        유저 토글
+      </button>
       <MessageContainer>
         {/* 채팅 내역 쌓이는 컴포넌트 */}
         {messageStorage &&
@@ -65,11 +78,14 @@ export default Messenger;
 
 const MessageContainer = styled.div`
   display: flex;
-  width: 30rem;
+  width: 35rem;
   height: 40rem;
   background-color: pink;
   flex-direction: column;
   overflow-y: auto;
 `;
 
-const Message = styled.div<{ curUser: boolean }>``;
+const Message = styled.div<{ curUser: boolean }>`
+  display: flex;
+  justify-content: ${({ curUser }) => (curUser ? 'flex-end' : 'flex-start')};
+`;

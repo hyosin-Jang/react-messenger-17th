@@ -35,8 +35,9 @@ body {
  }
  
 
-/*
+
 button{
+   width: auto;
    background: none;
    border: none;
    cursor: pointer;
@@ -44,5 +45,5 @@ button{
       outline: none;
    }
 }
-*/
+
 `;

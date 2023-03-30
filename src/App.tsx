@@ -15,10 +15,9 @@ function App() {
     name: nameArr[i],
   }));
 
-  console.log('newUserGroup', testUserGroup);
+  // console.log('newUserGroup', testUserGroup);
 
   const setDefaultUser = useCallback(() => {
-    console.log('몇번');
     setUser((prev) => [...prev, ...testUserGroup]);
   }, []);
 
@@ -27,9 +26,9 @@ function App() {
   }, []);
 
   return (
-    <div>
+    <>
       <MessengerRouter />
-    </div>
+    </>
   );
 }
 

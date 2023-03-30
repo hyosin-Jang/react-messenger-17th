@@ -13,26 +13,17 @@ const Header = ({ title, children }: HeaderProps) => {
   const navigate = useNavigate();
   return (
     <HeaderWrapper>
-      {/* 첫번째 버튼은 뒤로가기 고정 */}
       <button className="icon-left">
-        {' '}
         {/*onClick={() => navigate(-1)}>*/}
         <Icon src={Back} alt="icon-back" />
       </button>
       <span className="header-title">{title}</span>
       {children}
-      {/*<span className="icon-right"></span>*/}
     </HeaderWrapper>
   );
 };
 
 export default Header;
-
-const Icon = styled.img`
-  width: 1.6rem;
-  height: 1.6rem;
-  display: inline-block;
-`;
 
 const HeaderWrapper = styled.header`
   ${flexCenter}
@@ -47,6 +38,9 @@ const HeaderWrapper = styled.header`
   }
 
   .header-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    font-family: 'NotoSansKRRegular';
   }
 
   .icon-right {
@@ -54,4 +48,10 @@ const HeaderWrapper = styled.header`
     top: calc(50% - 10px);
     right: 0.6rem;
   }
+`;
+
+const Icon = styled.img`
+  width: 1.6rem;
+  height: 1.6rem;
+  display: inline-block;
 `;

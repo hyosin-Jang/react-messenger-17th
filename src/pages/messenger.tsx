@@ -24,7 +24,7 @@ const Messenger = () => {
   const input = useInput('');
 
   const curUserGroup = useRecoilValue(userGroup);
-  console.log('curUserGroup', curUserGroup);
+  // console.log('curUserGroup', curUserGroup);
 
   // 내 아이디 <-> 상대 아이디
   const handleUserToggle = (e: any) => {
@@ -100,7 +100,8 @@ const Messenger = () => {
         {messageStorage &&
           messageStorage.map((message, idx) => (
             <Message key={idx} curUser={message.userId === curUserId}>
-              <span>{message.userId}</span> <span>{message.data}</span>{' '}
+              <ProfileImg src={require(`../assets/${message.userId}.png`)} />
+              <span>{message.userId}</span> <span>{message.data}</span>
               <span>{message.timestamp}</span>
             </Message>
           ))}
@@ -131,4 +132,10 @@ const Message = styled.div<{ curUser: boolean }>`
   display: flex;
   flex-direction: ${({ curUser }) => (curUser ? 'row-reverse' : 'row')};
   // justify-content: ${({ curUser }) => (curUser ? 'flex-end' : 'flex-start')};
+`;
+
+const ProfileImg = styled.img`
+  width: 2rem;
+  height: 2rem;
+  display: inline-block;
 `;

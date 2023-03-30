@@ -9,7 +9,7 @@ function App() {
   const setUser = useSetRecoilState(userGroup);
 
   const n = 4;
-  const nameArr = ['hani', 'herin', 'hyein', 'daniel'];
+  const nameArr = ['hani', 'herin', 'hyein', 'minij'];
   const testUserGroup: UserInfoType[] = Array.from({ length: n }, (_, i) => ({
     userId: i + 1,
     name: nameArr[i],

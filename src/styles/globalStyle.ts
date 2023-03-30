@@ -21,7 +21,7 @@ body {
    align-items: center;
    -webkit-box-pack: center;
    justify-content: center;
-   font-family: 'Noto Sans KR', sans-serif;
+   font-family: 'NotoSansKRRegular', sans-serif;
    margin: 0px;
  
    -webkit-font-smoothing: antialiased;

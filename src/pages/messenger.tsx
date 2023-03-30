@@ -75,6 +75,12 @@ const Messenger = () => {
     return `${hours}:${minutes}`;
   };
 
+  const getUserNameById = (userId: number) => {
+    const name = curUserGroup.find((user) => user.userId === userId)?.name;
+    // console.log('name: ', name);
+    return name;
+  };
+
   // 유저 정보랑 채팅 내역 json으로 저장하는 함수
   const saveToJson = (e: any) => {
     e.preventDefault();
@@ -108,7 +114,8 @@ const Messenger = () => {
           messageStorage.map((message, idx) => (
             <Message key={idx} curUser={message.userId === curUserId}>
               <ProfileImg src={require(`../assets/${message.userId}.png`)} />
-              <span>{message.userId}</span> <span>{message.data}</span>
+              <span>{getUserNameById(message.userId)}</span>{' '}
+              <span>{message.data}</span>
               <span>{setDateFormat(message.timestamp)}</span>
             </Message>
           ))}

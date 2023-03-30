@@ -138,7 +138,7 @@ const Messenger = () => {
                   {getUserNameById(message.userId)}
                 </span>{' '}
                 <div className="chat-data">
-                  <span className="message">{message.data}</span>
+                  <ChatBubble className="message">{message.data}</ChatBubble>
                   <span className="timestamp">
                     {setDateFormat(message.timestamp)}
                   </span>
@@ -189,6 +189,17 @@ const Form = styled.form`
   }
 `;
 
+const ChatBubble = styled.div`
+  position: relative;
+  display: inline-block;
+  padding: 0.5rem;
+  border-radius: 10px;
+  border: 0.7px solid black;
+  font-size: 1.3rem;
+  max-width: 70%;
+  background-color: white;
+`;
+
 const Wrapper = styled.main`
   ${flexCenter}
   flex-direction: column;
@@ -217,7 +228,7 @@ const MessageContainer = styled.div`
   display: flex;
   width: 100%;
   height: 40rem;
-  background-color: pink;
+  // background-color: pink;
   flex-direction: column;
   gap: 1.5rem;
   padding: 1rem;
@@ -228,7 +239,6 @@ const MessageContainer = styled.div`
 const Message = styled.div<{ curUser: boolean }>`
   display: flex;
   flex-direction: ${({ curUser }) => (curUser ? 'row-reverse' : 'row')};
-  // justify-content: ${({ curUser }) => (curUser ? 'flex-end' : 'flex-start')};
   align-items: center;
   gap: 1rem;
 
@@ -239,16 +249,22 @@ const Message = styled.div<{ curUser: boolean }>`
 
     .nickname {
       display: flex;
+      font-weight: 700;
+
       justify-content: ${({ curUser }) =>
         curUser ? 'flex-end' : 'flex-start'};
     }
 
     .chat-data {
       display: flex;
+      gap: 0.5rem;
+
       flex-direction: ${({ curUser }) => (curUser ? 'row-reverse' : 'row')};
       .message {
       }
       .timestamp {
+        display: flex;
+        align-self: flex-end;
       }
     }
   }

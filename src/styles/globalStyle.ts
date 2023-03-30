@@ -28,13 +28,10 @@ body {
    -moz-osx-font-smoothing: grayscale;
  }
  
- /* TODO: Code 태그가 뭔지 */
  code {
    font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
      monospace;
  }
- 
-
 
 button{
    width: auto;
@@ -45,5 +42,4 @@ button{
       outline: none;
    }
 }
-
 `;

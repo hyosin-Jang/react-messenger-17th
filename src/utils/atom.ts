@@ -1,4 +1,4 @@
-import { atom, atomFamily } from 'recoil';
+import { atom } from 'recoil';
 import { UserInfoType } from './type';
 
 export const userInfo = atom<UserInfoType>({
@@ -6,7 +6,6 @@ export const userInfo = atom<UserInfoType>({
   default: {
     userId: 1,
     name: 'hyosin',
-    // profileImg: null,
   },
 });
 

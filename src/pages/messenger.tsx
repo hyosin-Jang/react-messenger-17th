@@ -1,23 +1,23 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
-import styled from 'styled-components';
+import ToggleSwitch from '../components/ToggleSwitch';
+import Header from 'components/Header';
+
 import useInput from '../hooks/useInput';
 import { useRecoilValue } from 'recoil';
 import { userGroup } from '../utils/atom';
-import { UserInfoType } from '../utils/type';
+// import { UserInfoType } from '../utils/type';
+
+import styled from 'styled-components';
 import { flexCenter } from '../styles/theme';
-import ToggleSwitch from '../components/ToggleSwitch';
-import Header from 'components/Header';
 import Send from '../assets/icon-send.png';
 import Save from '../assets/icon-save.png';
+import { setDateFormat } from 'utils';
+
+const JSON_FILENAME = 'chatting_info.json';
 
 const Messenger = () => {
-  // 내 유저 아이디
   const [curUserId, setCurUserId] = useState<number>(1);
-
-  // 상대 유저 아이디
   const [otherUserId, setOtherUserId] = useState<number>(2);
-
-  // 채팅 내역 창고
   const [messageStorage, setMessageStorage] = useState([
     {
       userId: 1,
@@ -27,11 +27,8 @@ const Messenger = () => {
   ]);
 
   const input = useInput('');
-
   const curUserGroup = useRecoilValue(userGroup);
-  // console.log('curUserGroup', curUserGroup);
 
-  // 내 아이디 <-> 상대 아이디
   const handleUserToggle = useCallback(
     (e: any) => {
       setOtherUserId(curUserId);
@@ -50,9 +47,10 @@ const Messenger = () => {
     scrollToBottom();
   }, [messageStorage]);
 
-  // console.log('messageStorage', messageStorage);
-  // console.log('curUserId', curUserId);
-  // console.log('otherUserId', otherUserId);
+  const resetInput = (e: any) => {
+    input.setValue('');
+    e.target.reset();
+  };
 
   const scrollRef = useRef<null | HTMLDivElement>(null);
 
@@ -67,28 +65,16 @@ const Messenger = () => {
       timestamp: new Date().toString(),
     };
 
-    // console.log('newMessage', newMessage);
-
     setMessageStorage([...messageStorage, newMessage]);
-    // input 초기화
-    input.setValue('');
-    e.target.reset();
-  };
-
-  const setDateFormat = (date: string) => {
-    const hours = new Date(date).getHours().toString().padStart(2, '0');
-    const minutes = new Date(date).getMinutes().toString().padStart(2, '0');
-    // console.log(hours, ': ', minutes);
-    return `${hours}:${minutes}`;
+    resetInput(e);
   };
 
   const getUserNameById = (userId: number) => {
     const name = curUserGroup.find((user) => user.userId === userId)?.name;
-    // console.log('name: ', name);
     return name;
   };
 
-  // 유저 정보랑 채팅 내역 json으로 저장하는 함수
+  // TODO: utils 함수로 분리
   const saveToJson = (e: any) => {
     e.preventDefault();
 
@@ -96,7 +82,6 @@ const Messenger = () => {
     const otherUserState = curUserGroup.find(
       (item) => item.userId === otherUserId
     );
-    // console.log('userState', userState, otherUserState);
 
     const combine = [userState, otherUserState, ...messageStorage];
 
@@ -106,26 +91,19 @@ const Messenger = () => {
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
-    link.download = 'chatting_info.json';
+    link.download = JSON_FILENAME;
     link.click();
   };
+
   return (
     <Wrapper>
-      <Header title={'채팅'}>
+      <Header title={getUserNameById(otherUserId)}>
         <ToggleSwitch
           className="icon-right"
           handleUserToggle={handleUserToggle}
         />
-
-        {/*
-        <button type="button" className="icon-right" onClick={handleUserToggle}>
-          유저 토글
-        </button>
-        */}
       </Header>
-
       <MessageContainer ref={scrollRef}>
-        {/* 채팅 내역 쌓이는 컴포넌트 */}
         {messageStorage &&
           messageStorage.map((message, idx) => (
             <Message key={idx} curUser={message.userId === curUserId}>
@@ -219,9 +197,6 @@ const Wrapper = styled.main`
 
   border-radius: 23px;
   transition: all 0.8s cubic-bezier(0.15, 0.83, 0.66, 1);
-
-  .title {
-  }
 `;
 
 const MessageContainer = styled.div`

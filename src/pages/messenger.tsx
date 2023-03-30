@@ -1,9 +1,14 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 import styled from 'styled-components';
 import useInput from '../hooks/useInput';
 import { useRecoilValue } from 'recoil';
 import { userGroup } from '../utils/atom';
 import { UserInfoType } from '../utils/type';
+import { flexCenter } from '../styles/theme';
+import ToggleSwitch from '../components/ToggleSwitch';
+import Header from 'components/Header';
+import Send from '../assets/icon-send.png';
+import Save from '../assets/icon-save.png';
 
 const Messenger = () => {
   // 내 유저 아이디
@@ -27,11 +32,13 @@ const Messenger = () => {
   // console.log('curUserGroup', curUserGroup);
 
   // 내 아이디 <-> 상대 아이디
-  const handleUserToggle = (e: any) => {
-    e.preventDefault();
-    setOtherUserId(curUserId);
-    setCurUserId(otherUserId);
-  };
+  const handleUserToggle = useCallback(
+    (e: any) => {
+      setOtherUserId(curUserId);
+      setCurUserId(otherUserId);
+    },
+    [curUserId, otherUserId]
+  );
 
   const scrollToBottom = () => {
     if (scrollRef.current) {
@@ -103,42 +110,118 @@ const Messenger = () => {
     link.click();
   };
   return (
-    <div>
-      <h1>채팅</h1>
-      <button type="button" onClick={handleUserToggle}>
-        유저 토글
-      </button>
+    <Wrapper>
+      <Header title={'채팅'}>
+        <ToggleSwitch
+          className="icon-right"
+          handleUserToggle={handleUserToggle}
+        />
+
+        {/*
+        <button type="button" className="icon-right" onClick={handleUserToggle}>
+          유저 토글
+        </button>
+        */}
+      </Header>
+
       <MessageContainer ref={scrollRef}>
         {/* 채팅 내역 쌓이는 컴포넌트 */}
         {messageStorage &&
           messageStorage.map((message, idx) => (
             <Message key={idx} curUser={message.userId === curUserId}>
-              <ProfileImg src={require(`../assets/${message.userId}.png`)} />
-              <span>{getUserNameById(message.userId)}</span>{' '}
-              <span>{message.data}</span>
-              <span>{setDateFormat(message.timestamp)}</span>
+              <ProfileImg
+                alt="profile-img"
+                src={require(`../assets/${message.userId}.png`)}
+              />
+              <div className="chat-group">
+                <span className="nickname">
+                  {getUserNameById(message.userId)}
+                </span>{' '}
+                <div className="chat-data">
+                  <span className="message">{message.data}</span>
+                  <span className="timestamp">
+                    {setDateFormat(message.timestamp)}
+                  </span>
+                </div>
+              </div>
             </Message>
           ))}
       </MessageContainer>
-      <form onSubmit={handleSubmit}>
-        <input type="text" onChange={input.onChange} autoFocus />
-        <button type="submit">전송</button>
-      </form>
-      <button type="button" onClick={saveToJson}>
-        json으로 저장
-      </button>
-    </div>
+      <Form onSubmit={handleSubmit}>
+        <button type="button" onClick={saveToJson}>
+          <Icon alt="icon-save" src={Save} />
+        </button>
+        <input
+          type="text"
+          className="chatting-input"
+          onChange={input.onChange}
+          autoFocus
+        />
+        <button type="submit">
+          <Icon alt="icon-send" src={Send} />
+        </button>
+      </Form>
+    </Wrapper>
   );
 };
 
 export default Messenger;
 
+const Icon = styled.img`
+  width: 1.6rem;
+  height: 1.6rem;
+  display: inline-block;
+`;
+
+const Form = styled.form`
+  display: flex;
+  width: 100%;
+  padding: 0 0.5rem;
+  margin: 1rem 0;
+  box-sizing: border-box;
+
+  .chatting-input {
+    width: 90%;
+    height: auto;
+    padding: 0.6rem;
+    border: 1px solid grey;
+    border-radius: 20px;
+  }
+`;
+
+const Wrapper = styled.main`
+  ${flexCenter}
+  flex-direction: column;
+  width: 30rem;
+  height: 50rem;
+  border-radius: 2rem;
+  background: radial-gradient(
+      178.94% 106.41% at 26.42% 106.41%,
+      #fff7b1 0%,
+      rgba(255, 255, 255, 0) 71.88%
+    )
+    #ffffff;
+
+  box-shadow: 0px 155px 62px rgba(0, 0, 0, 0.01),
+    0px 87px 52px rgba(0, 0, 0, 0.05), 0px 39px 39px rgba(0, 0, 0, 0.09),
+    0px 10px 21px rgba(0, 0, 0, 0.1), 0px 0px 0px rgba(0, 0, 0, 0.1);
+
+  border-radius: 23px;
+  transition: all 0.8s cubic-bezier(0.15, 0.83, 0.66, 1);
+
+  .title {
+  }
+`;
+
 const MessageContainer = styled.div`
   display: flex;
-  width: 35rem;
+  width: 100%;
   height: 40rem;
   background-color: pink;
   flex-direction: column;
+  gap: 1.5rem;
+  padding: 1rem;
+  box-sizing: border-box;
   overflow-y: auto;
 `;
 
@@ -146,10 +229,34 @@ const Message = styled.div<{ curUser: boolean }>`
   display: flex;
   flex-direction: ${({ curUser }) => (curUser ? 'row-reverse' : 'row')};
   // justify-content: ${({ curUser }) => (curUser ? 'flex-end' : 'flex-start')};
+  align-items: center;
+  gap: 1rem;
+
+  .chat-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+
+    .nickname {
+      display: flex;
+      justify-content: ${({ curUser }) =>
+        curUser ? 'flex-end' : 'flex-start'};
+    }
+
+    .chat-data {
+      display: flex;
+      flex-direction: ${({ curUser }) => (curUser ? 'row-reverse' : 'row')};
+      .message {
+      }
+      .timestamp {
+      }
+    }
+  }
 `;
 
 const ProfileImg = styled.img`
   width: 2rem;
   height: 2rem;
+  border-radius: 50%;
   display: inline-block;
 `;

@@ -68,6 +68,13 @@ const Messenger = () => {
     e.target.reset();
   };
 
+  const setDateFormat = (date: string) => {
+    const hours = new Date(date).getHours().toString().padStart(2, '0');
+    const minutes = new Date(date).getMinutes().toString().padStart(2, '0');
+    // console.log(hours, ': ', minutes);
+    return `${hours}:${minutes}`;
+  };
+
   // 유저 정보랑 채팅 내역 json으로 저장하는 함수
   const saveToJson = (e: any) => {
     e.preventDefault();
@@ -102,7 +109,7 @@ const Messenger = () => {
             <Message key={idx} curUser={message.userId === curUserId}>
               <ProfileImg src={require(`../assets/${message.userId}.png`)} />
               <span>{message.userId}</span> <span>{message.data}</span>
-              <span>{message.timestamp}</span>
+              <span>{setDateFormat(message.timestamp)}</span>
             </Message>
           ))}
       </MessageContainer>

@@ -36,7 +36,7 @@ const Wrapper = styled.div`
     position: absolute;
 
     &:checked + .switch {
-      background-color: #34c759;
+      background-color: #ebff82;
     }
 
     &:checked + .switch .slider {

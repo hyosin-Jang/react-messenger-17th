@@ -1,3 +1,6 @@
+export default {};
+
+/*
 import { useEffect, useRef } from 'react';
 import { FixedSizeList } from 'react-window';
 
@@ -11,15 +14,15 @@ const MessengerList = ({ message, curUserId, curUserGroup }: any) => {
     return name;
   };
 
-  const scrollRef = useRef<any>();
+  const scrollRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
     if (scrollRef.current) {
       // 첫번째 인자: 스크롤할 항목의 인덱스
       // 두번째 인자: 항목이 스크롤될 때 정렬하는 방법 (end: 항목을 보이는 영역의 끝에 위치시킴)
-      scrollRef.current.scrollToItem(message.length - 1, 'end'); // 방금 생성된 인덱스의 아이템이 끝에 위치하도록 스크롤
+      // scrollRef.current.scrollToItem(message.length); // 방금 생성된 인덱스의 아이템이 끝에 위치하도록 스크롤
 
-      // scrollRef.current.scrollTop = scrollRef.current.scrollHeight; => 기존 ref를 이용한 방법
+      scrollRef.current.scrollTop = scrollRef.current.scrollHeight; //=> 기존 ref를 이용한 방법
     }
   };
 
@@ -29,7 +32,7 @@ const MessengerList = ({ message, curUserId, curUserGroup }: any) => {
 
   return (
     <FixedSizeList
-      ref={scrollRef}
+      innerRef={scrollRef}
       height={400} // 리스트 컨테이너 높이
       itemCount={message.length} // 리스트 전체 항목 수
       itemSize={50} // 각 리스트 항목 크기 (한 줄만 입력 받는다고 가정)
@@ -113,3 +116,4 @@ const ChatBubble = styled.div`
   font-size: 1.3rem;
   background-color: ${theme.colors.white};
 `;
+*/

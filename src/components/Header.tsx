@@ -1,15 +1,15 @@
 import { ReactNode } from 'react';
-import { useNavigate } from 'react-router-dom';
+// import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { flexCenter } from 'styles/theme';
-import Back from '../assets/icon-back.png';
+import Back from 'assets/icon-back.png';
 
 interface HeaderProps {
   title?: string;
   children?: ReactNode;
 }
 const Header = ({ title, children }: HeaderProps) => {
-  // const navigate = useNavigate();
+  // const navigate = useNavigate(); => 다음 과제용
   return (
     <HeaderWrapper>
       <button className="icon-left">

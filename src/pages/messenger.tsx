@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, useCallback, ChangeEvent } from 'react';
+import { useState, useRef, useCallback, ChangeEvent } from 'react';
 
 // components
 import ToggleSwitch from '../components/ToggleSwitch';
@@ -14,9 +14,10 @@ import { ChatMessageType } from 'utils/type';
 
 // style
 import styled from 'styled-components';
-import { flexCenter, theme } from '../styles/theme';
+import { flexCenter } from '../styles/theme';
 import Send from '../assets/icon-send.png';
 import Save from '../assets/icon-save.png';
+import MessengerList from 'components/MessageList';
 
 // constant
 const JSON_FILENAME = 'chatting_info.json';
@@ -44,16 +45,6 @@ const Messenger = () => {
     [curUserId, otherUserId]
   );
 
-  const scrollToBottom = () => {
-    if (scrollRef.current) {
-      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
-    }
-  };
-
-  useEffect(() => {
-    scrollToBottom();
-  }, [messageStorage]);
-
   const resetInput = (e: any) => {
     input.setValue('');
     e.target.reset();
@@ -79,7 +70,6 @@ const Messenger = () => {
     return name;
   };
 
-  // TODO: utils 함수로 분리
   const saveToJson = (e: any) => {
     e.preventDefault();
 
@@ -108,7 +98,14 @@ const Messenger = () => {
           handleUserToggle={handleUserToggle}
         />
       </Header>
-      <MessageContainer ref={scrollRef}>
+
+      <MessengerList
+        message={messageStorage}
+        curUserId={curUserId}
+        curUserGroup={curUserGroup}
+      />
+
+      {/* -> 기존 코드 (windowing 적용 중)
         {messageStorage &&
           messageStorage.map((message, idx) => (
             <Message key={idx} curUser={message.userId === curUserId}>
@@ -129,7 +126,8 @@ const Messenger = () => {
               </div>
             </Message>
           ))}
-      </MessageContainer>
+          */}
+
       <Form onSubmit={handleSubmit}>
         <button type="button" onClick={saveToJson}>
           <Icon alt="icon-save" src={Save} />
@@ -172,17 +170,6 @@ const Form = styled.form`
   }
 `;
 
-const ChatBubble = styled.div`
-  max-width: 70%;
-  position: relative;
-  display: inline-block;
-  padding: 0.5rem;
-  border-radius: 10px;
-  border: 0.7px solid black;
-  font-size: 1.3rem;
-  background-color: ${theme.colors.white};
-`;
-
 const Wrapper = styled.main`
   ${flexCenter}
   flex-direction: column;
@@ -202,52 +189,4 @@ const Wrapper = styled.main`
 
   border-radius: 23px;
   transition: all 0.8s cubic-bezier(0.15, 0.83, 0.66, 1);
-`;
-
-const MessageContainer = styled.div`
-  width: 100%;
-  height: 40rem;
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-  padding: 1rem;
-  box-sizing: border-box;
-  overflow-y: auto;
-`;
-
-const Message = styled.div<{ curUser: boolean }>`
-  display: flex;
-  flex-direction: ${({ curUser }) => (curUser ? 'row-reverse' : 'row')};
-  align-items: center;
-  gap: 1rem;
-
-  .chat-group {
-    display: flex;
-    flex-direction: column;
-    gap: 0.2rem;
-
-    .nickname {
-      display: flex;
-      justify-content: ${({ curUser }) =>
-        curUser ? 'flex-end' : 'flex-start'};
-      font-weight: 700;
-    }
-
-    .chat-data {
-      display: flex;
-      flex-direction: ${({ curUser }) => (curUser ? 'row-reverse' : 'row')};
-      gap: 0.5rem;
-      .timestamp {
-        display: flex;
-        align-self: flex-end;
-      }
-    }
-  }
-`;
-
-const ProfileImg = styled.img`
-  width: 2rem;
-  height: 2rem;
-  display: inline-block;
-  border-radius: 50%;
 `;

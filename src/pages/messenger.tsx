@@ -14,7 +14,7 @@ import { ChatMessageType } from 'utils/type';
 
 // style
 import styled from 'styled-components';
-import { flexCenter } from '../styles/theme';
+import { flexCenter, theme } from '../styles/theme';
 import Send from '../assets/icon-send.png';
 import Save from '../assets/icon-save.png';
 
@@ -180,7 +180,7 @@ const ChatBubble = styled.div`
   border-radius: 10px;
   border: 0.7px solid black;
   font-size: 1.3rem;
-  background-color: white;
+  background-color: ${theme.colors.white};
 `;
 
 const Wrapper = styled.main`

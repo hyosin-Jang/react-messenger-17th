@@ -1,8 +1,10 @@
-import styled, { css } from 'styled-components';
+import styled, { DefaultTheme, css } from 'styled-components';
 
-export const theme = {
+export const theme: DefaultTheme = {
   colors: {
     white: '#ffffff',
+    yellow: '#ebff82',
+    grey: '#e9e9eb',
   },
 };
 

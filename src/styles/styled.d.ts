@@ -2,14 +2,10 @@ import 'styled-components';
 
 declare module 'styled-components' {
   export interface DefaultTheme {
-    color: {
-      black: '#000000';
-      black2: '#151515';
+    colors: {
       white: '#ffffff';
-      point: '#ff366a';
-      grey: '#5b5b5b';
-      grey100: '#767676';
-      grey200: '#f5f5f5';
+      yellow: '#ebff82';
+      grey: '#e9e9eb';
     };
   }
 }

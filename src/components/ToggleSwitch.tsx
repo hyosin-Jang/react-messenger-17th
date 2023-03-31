@@ -1,12 +1,13 @@
+import { ChangeEvent } from 'react';
 import styled from 'styled-components';
+import { theme } from 'styles/theme';
 
 interface ToggleSwitchProps {
   className?: string;
-  handleUserToggle?: (e: any) => void;
+  handleUserToggle?: (e: ChangeEvent<HTMLInputElement>) => void;
 }
-const ToggleSwitch = ({ className, handleUserToggle }: ToggleSwitchProps) => {
-  console.log('classNAme', className);
 
+const ToggleSwitch = ({ className, handleUserToggle }: ToggleSwitchProps) => {
   return (
     <Wrapper className={`container ${className}`}>
       <input
@@ -32,11 +33,11 @@ const Wrapper = styled.div`
   .checkbox {
     width: 0;
     height: 0;
-    opacity: 0;
     position: absolute;
+    opacity: 0;
 
     &:checked + .switch {
-      background-color: #ebff82;
+      background-color: ${theme.colors.yellow};
     }
 
     &:checked + .switch .slider {
@@ -50,7 +51,7 @@ const Wrapper = styled.div`
     height: 100%;
     display: block;
 
-    background-color: #e9e9eb;
+    background-color: ${theme.colors.grey};
     border-radius: 16px;
     transition: all 0.2s ease-out;
     cursor: pointer;
@@ -64,7 +65,7 @@ const Wrapper = styled.div`
     top: calc(50% - 27px / 2);
 
     border-radius: 50%;
-    background: #ffffff;
+    background: ${theme.colors.white};
     box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.15), 0px 3px 1px rgba(0, 0, 0, 0.06);
     transition: all 0.2s ease-out;
     cursor: pointer;

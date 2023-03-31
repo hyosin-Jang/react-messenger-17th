@@ -1,36 +1,43 @@
-import { useState, useRef, useEffect, useCallback } from 'react';
+import { useState, useRef, useEffect, useCallback, ChangeEvent } from 'react';
+
+// components
 import ToggleSwitch from '../components/ToggleSwitch';
 import Header from 'components/Header';
 
+// utils
 import useInput from '../hooks/useInput';
 import { useRecoilValue } from 'recoil';
 import { userGroup } from '../utils/atom';
+import { setDateFormat } from 'utils';
+import { ChatMessageType } from 'utils/type';
 // import { UserInfoType } from '../utils/type';
 
+// style
 import styled from 'styled-components';
 import { flexCenter } from '../styles/theme';
 import Send from '../assets/icon-send.png';
 import Save from '../assets/icon-save.png';
-import { setDateFormat } from 'utils';
 
+// constant
 const JSON_FILENAME = 'chatting_info.json';
 
 const Messenger = () => {
   const [curUserId, setCurUserId] = useState<number>(1);
   const [otherUserId, setOtherUserId] = useState<number>(2);
-  const [messageStorage, setMessageStorage] = useState([
+  const [messageStorage, setMessageStorage] = useState<ChatMessageType[]>([
     {
       userId: 1,
       data: 'sample',
-      timestamp: new Date().toString(),
+      timestamp: Date(),
     },
   ]);
 
   const input = useInput('');
   const curUserGroup = useRecoilValue(userGroup);
+  const scrollRef = useRef<null | HTMLDivElement>(null);
 
   const handleUserToggle = useCallback(
-    (e: any) => {
+    (e: ChangeEvent<HTMLInputElement>) => {
       setOtherUserId(curUserId);
       setCurUserId(otherUserId);
     },
@@ -52,17 +59,15 @@ const Messenger = () => {
     e.target.reset();
   };
 
-  const scrollRef = useRef<null | HTMLDivElement>(null);
-
-  const handleSubmit = (e: any) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (input.value.trim() === '') return;
 
-    const newMessage = {
+    const newMessage: ChatMessageType = {
       userId: curUserId,
       data: input.value,
-      timestamp: new Date().toString(),
+      timestamp: Date(),
     };
 
     setMessageStorage([...messageStorage, newMessage]);
@@ -114,7 +119,7 @@ const Messenger = () => {
               <div className="chat-group">
                 <span className="nickname">
                   {getUserNameById(message.userId)}
-                </span>{' '}
+                </span>
                 <div className="chat-data">
                   <ChatBubble className="message">{message.data}</ChatBubble>
                   <span className="timestamp">
@@ -152,10 +157,10 @@ const Icon = styled.img`
 `;
 
 const Form = styled.form`
-  display: flex;
   width: 100%;
-  padding: 0 0.5rem;
+  display: flex;
   margin: 1rem 0;
+  padding: 0 0.5rem;
   box-sizing: border-box;
 
   .chatting-input {
@@ -168,13 +173,13 @@ const Form = styled.form`
 `;
 
 const ChatBubble = styled.div`
+  max-width: 70%;
   position: relative;
   display: inline-block;
   padding: 0.5rem;
   border-radius: 10px;
   border: 0.7px solid black;
   font-size: 1.3rem;
-  max-width: 70%;
   background-color: white;
 `;
 
@@ -200,10 +205,9 @@ const Wrapper = styled.main`
 `;
 
 const MessageContainer = styled.div`
-  display: flex;
   width: 100%;
   height: 40rem;
-  // background-color: pink;
+  display: flex;
   flex-direction: column;
   gap: 1.5rem;
   padding: 1rem;
@@ -224,19 +228,15 @@ const Message = styled.div<{ curUser: boolean }>`
 
     .nickname {
       display: flex;
-      font-weight: 700;
-
       justify-content: ${({ curUser }) =>
         curUser ? 'flex-end' : 'flex-start'};
+      font-weight: 700;
     }
 
     .chat-data {
       display: flex;
-      gap: 0.5rem;
-
       flex-direction: ${({ curUser }) => (curUser ? 'row-reverse' : 'row')};
-      .message {
-      }
+      gap: 0.5rem;
       .timestamp {
         display: flex;
         align-self: flex-end;
@@ -248,6 +248,6 @@ const Message = styled.div<{ curUser: boolean }>`
 const ProfileImg = styled.img`
   width: 2rem;
   height: 2rem;
-  border-radius: 50%;
   display: inline-block;
+  border-radius: 50%;
 `;

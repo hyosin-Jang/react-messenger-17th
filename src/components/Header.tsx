@@ -1,23 +1,22 @@
-import { ReactChild } from 'react';
-import { Children } from 'react';
-import styled from 'styled-components';
+import { ReactNode } from 'react';
 import { useNavigate } from 'react-router-dom';
+import styled from 'styled-components';
 import { flexCenter } from 'styles/theme';
 import Back from '../assets/icon-back.png';
 
 interface HeaderProps {
   title?: string;
-  children?: ReactChild | ReactChild[]; // TODO: children 타입 수정
+  children?: ReactNode;
 }
 const Header = ({ title, children }: HeaderProps) => {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   return (
     <HeaderWrapper>
       <button className="icon-left">
         {/*onClick={() => navigate(-1)}>*/}
         <Icon src={Back} alt="icon-back" />
       </button>
-      <span className="header-title">{title}</span>
+      <h1 className="header-title">{title}</h1>
       {children}
     </HeaderWrapper>
   );
@@ -27,9 +26,9 @@ export default Header;
 
 const HeaderWrapper = styled.header`
   ${flexCenter}
+  width: 100%;
   height: 5rem;
   position: relative;
-  width: 100%;
 
   .icon-left {
     position: absolute;

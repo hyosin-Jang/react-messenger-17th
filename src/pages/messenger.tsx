@@ -3,7 +3,7 @@ import { useState, useRef, useCallback, ChangeEvent, useEffect } from 'react';
 // components
 import ToggleSwitch from 'components/ToggleSwitch';
 import Header from 'components/Header';
-// import MessengerList from 'components/MessageList';
+import MessengerList from 'components/MessageList';
 
 // utils
 import useInput from 'hooks/useInput';
@@ -246,6 +246,7 @@ const ChatBubble = styled.div`
   max-width: 70%;
   position: relative;
   display: inline-block;
+  word-break: break-all;
   padding: 0.5rem;
   border-radius: 10px;
   border: 0.7px solid black;

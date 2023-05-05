@@ -12,9 +12,10 @@ import {
   chatRoomCurUserIdSelector,
   chatRoomOtherUserIdSelector,
   chatRoomMessagesSelector,
+  toggleUserId,
 } from 'utils/atom';
 import { setDateFormat } from 'utils';
-import { ChatMessageType } from 'utils/type';
+import { ChatMessageType, ChatRoomInfoType } from 'utils/type';
 
 // style
 import styled from 'styled-components';
@@ -38,6 +39,9 @@ const Messenger = () => {
   // roomId를 통해 현재 방 채팅 정보 가지고 오기
   const [messageStorage, setMessageStorage] = useRecoilState<ChatMessageType[]>(
     chatRoomMessagesSelector({ roomId: room })
+  );
+  const [toggleUser, setToggleUser] = useRecoilState<ChatRoomInfoType>(
+    toggleUserId({ roomId: room })
   );
 
   const input = useInput('');
@@ -99,25 +103,22 @@ const Messenger = () => {
     link.click();
   };
 
-  /*
-  const handleUserToggle = useCallback(
-    (e: ChangeEvent<HTMLInputElement>) => {
-      setOtherUserId(curUserId);
-      setCurUserId(otherUserId);
-    },
-    [curUserId, otherUserId]
-  );
-  */
+  const handleUserToggle = (e: ChangeEvent<HTMLInputElement>) => {
+    const newUserId: ChatRoomInfoType = {
+      curUserId: otherUserId,
+      otherUserId: curUserId,
+      messages: messageStorage,
+    };
+    setToggleUser(newUserId);
+  };
 
   return (
     <Wrapper>
       <Header title={getUserNameById(otherUserId)}>
-        {/*
         <ToggleSwitch
           className="icon-right"
           handleUserToggle={handleUserToggle}
         />
-      */}
       </Header>
 
       <MessageContainer ref={scrollRef}>

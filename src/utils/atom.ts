@@ -97,7 +97,6 @@ export const chatRoomMessagesSelector = selectorFamily<
   get:
     ({ roomId }) =>
     ({ get }) => {
-      console.log('get(chatRooms):', get(chatRooms));
       return (
         get(chatRooms).find((chatRoom) => chatRoom.roomId === roomId)?.data
           .messages ?? testChatRoom
@@ -123,6 +122,34 @@ export const chatRoomMessagesSelector = selectorFamily<
       // 업데이트한 최신 채팅방들 정보
       newRooms = [...newRooms, newRoom].sort((a, b) => a.roomId - b.roomId);
 
+      set(chatRooms, newRooms);
+    },
+});
+export const toggleUserId = selectorFamily<
+  ChatRoomInfoType,
+  { roomId: number }
+>({
+  key: 'toggleUserId',
+  get:
+    ({ roomId }) =>
+    ({ get }) => {
+      return (
+        get(chatRooms).find((chatRoom) => chatRoom.roomId === roomId)?.data
+          .messages ?? testChatRoom
+      );
+    },
+  set:
+    ({ roomId }) =>
+    ({ get, set }, newUserIdData) => {
+      let newRooms = [...get(chatRooms)].filter(
+        (rooms) => rooms.roomId !== roomId
+      );
+      const newRoom = {
+        roomId: roomId,
+        data: newUserIdData,
+      };
+
+      newRooms = [...newRooms, newRoom].sort((a, b) => a.roomId - b.roomId);
       set(chatRooms, newRooms);
     },
 });

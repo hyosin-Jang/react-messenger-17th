@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-// import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { flexCenter } from 'styles/theme';
 import Back from 'assets/icon-back.png';
@@ -9,11 +9,10 @@ interface HeaderProps {
   children?: ReactNode;
 }
 const Header = ({ title, children }: HeaderProps) => {
-  // const navigate = useNavigate(); => 다음 과제용
+  const navigate = useNavigate();
   return (
     <HeaderWrapper>
-      <button className="icon-left">
-        {/*onClick={() => navigate(-1)}>*/}
+      <button className="icon-left" onClick={() => navigate(-1)}>
         <Icon src={Back} alt="icon-back" />
       </button>
       <h1 className="header-title">{title}</h1>
@@ -46,6 +45,7 @@ const HeaderWrapper = styled.header`
     position: absolute;
     top: calc(50% - 10px);
     right: 0.6rem;
+    cursor: pointer;
   }
 `;
 

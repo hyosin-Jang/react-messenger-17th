@@ -20,8 +20,6 @@ const Friends = () => {
 
   const handleValue = (e: any) => {
     e.preventDefault();
-
-    console.log(e.target.value);
     setSearchTerm(e.target.value.trim());
   };
   return (
@@ -64,7 +62,6 @@ const Friends = () => {
         {users &&
           users
             .filter((user) => user.userId !== 0)
-
             .filter((user) => {
               if (searchTerm === '') {
                 return user;

@@ -43,8 +43,6 @@ const testChatRoom: ChatRoomType = {
   data: [],
 };
 
-// selectorFamily: selector 를 활용하는데 매개변수가 필요할 때 사용
-// Generic 으로 <리턴타입, 매개변수타입> 을 지정하고, get 프로퍼티를 구현할 때 클로저 를 활용해 매개변수(param) 을 활용해 로직 에서 파라미터를 활용할 수 있음
 export const chatRoomCurUserIdSelector = selectorFamily<number, any>({
   key: 'chatRoomCurUserId',
   get:

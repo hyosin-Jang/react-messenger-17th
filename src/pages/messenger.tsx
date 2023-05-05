@@ -3,12 +3,16 @@ import { useState, useRef, useCallback, ChangeEvent, useEffect } from 'react';
 // components
 import ToggleSwitch from 'components/ToggleSwitch';
 import Header from 'components/Header';
-// import MessengerList from 'components/MessageList';
 
 // utils
 import useInput from 'hooks/useInput';
-import { useRecoilValue } from 'recoil';
-import { userGroup } from 'utils/atom';
+import { useRecoilValue, useRecoilState } from 'recoil';
+import {
+  userGroup,
+  chatRoomCurUserIdSelector,
+  chatRoomOtherUserIdSelector,
+  chatRoomMessagesSelector,
+} from 'utils/atom';
 import { setDateFormat } from 'utils';
 import { ChatMessageType } from 'utils/type';
 
@@ -18,32 +22,27 @@ import { flexCenter } from 'styles/theme';
 import Send from 'assets/icon-send.png';
 import Save from 'assets/icon-save.png';
 import { theme } from 'styles/theme';
+import { useParams } from 'react-router-dom';
 
 // constant
 const JSON_FILENAME = 'chatting_info.json';
 
 const Messenger = () => {
-  const [curUserId, setCurUserId] = useState<number>(1);
-  const [otherUserId, setOtherUserId] = useState<number>(2);
-  const [messageStorage, setMessageStorage] = useState<ChatMessageType[]>([
-    {
-      userId: 1,
-      data: 'sample',
-      timestamp: Date(),
-    },
-  ]);
+  let { roomId } = useParams();
+  const room = Number(roomId);
+
+  // roomId를 통해 현재 유저 id와 상대 유저 id 가지고 오기
+  const curUserId = useRecoilValue(chatRoomCurUserIdSelector(room));
+  const otherUserId = useRecoilValue(chatRoomOtherUserIdSelector(room));
+
+  // roomId를 통해 현재 방 채팅 정보 가지고 오기
+  const [messageStorage, setMessageStorage] = useRecoilState<ChatMessageType[]>(
+    chatRoomMessagesSelector({ roomId: room })
+  );
 
   const input = useInput('');
   const curUserGroup = useRecoilValue(userGroup);
   const scrollRef = useRef<null | HTMLDivElement>(null);
-
-  const handleUserToggle = useCallback(
-    (e: ChangeEvent<HTMLInputElement>) => {
-      setOtherUserId(curUserId);
-      setCurUserId(otherUserId);
-    },
-    [curUserId, otherUserId]
-  );
 
   const scrollToBottom = () => {
     if (scrollRef.current) {
@@ -100,13 +99,25 @@ const Messenger = () => {
     link.click();
   };
 
+  /*
+  const handleUserToggle = useCallback(
+    (e: ChangeEvent<HTMLInputElement>) => {
+      setOtherUserId(curUserId);
+      setCurUserId(otherUserId);
+    },
+    [curUserId, otherUserId]
+  );
+  */
+
   return (
     <Wrapper>
       <Header title={getUserNameById(otherUserId)}>
+        {/*
         <ToggleSwitch
           className="icon-right"
           handleUserToggle={handleUserToggle}
         />
+      */}
       </Header>
 
       <MessageContainer ref={scrollRef}>
@@ -246,6 +257,7 @@ const ChatBubble = styled.div`
   max-width: 70%;
   position: relative;
   display: inline-block;
+  word-break: break-all;
   padding: 0.5rem;
   border-radius: 10px;
   border: 0.7px solid black;

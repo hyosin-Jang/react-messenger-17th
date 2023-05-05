@@ -38,6 +38,13 @@ const SettingWrapper = styled.div`
   .link {
     text-decoration: none;
     color: black;
+    width: 10rem;
+    background-color: white;
+    border: 1px solid grey;
+
+    text-align: center;
+    border-radius: 2rem;
+    padding: 1rem;
   }
 `;
 

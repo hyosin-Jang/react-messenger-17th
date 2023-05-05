@@ -106,10 +106,10 @@ const ChatsTab = styled.div`
   height: 3rem;
   gap: 1rem;
   cursor: pointer;
-  padding: 1rem;
+  padding: 1.1rem;
 
   &:hover {
-    background-color: lightgrey;
+    background-color: grey;
     color: white;
   }
 
@@ -123,6 +123,7 @@ const ChatsTab = styled.div`
       font-weight: 600;
     }
     .user-message {
+      height: 1rem;
     }
   }
 `;

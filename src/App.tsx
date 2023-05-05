@@ -5,7 +5,7 @@ import { userGroup } from './utils/atom';
 import { UserInfoType } from './utils/type';
 
 function App() {
-  const setUser = useSetRecoilState(userGroup);
+  const setUsers = useSetRecoilState(userGroup);
 
   const nameArr = ['hani', 'herin', 'hyein', 'minij'];
   const testUserGroup: UserInfoType[] = Array.from(
@@ -13,11 +13,19 @@ function App() {
     (_, i) => ({
       userId: i + 1,
       name: nameArr[i],
+      statusMessage: '호호',
     })
   );
 
   const setDefaultUser = () => {
-    setUser((prev) => [...prev, ...testUserGroup]);
+    const me: UserInfoType = {
+      userId: 0,
+      name: 'hyosin',
+      statusMessage: '하하',
+    };
+
+    // 기본 유저 아이디 설정
+    setUsers((prev) => [...prev, ...testUserGroup, me]);
   };
 
   useEffect(() => {

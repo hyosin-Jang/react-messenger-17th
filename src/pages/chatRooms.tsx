@@ -30,19 +30,28 @@ const ChatRooms = () => {
       <ChatsList>
         {rooms &&
           rooms.map((room) => (
-            <ChatsTab
-              key={room.roomId}
-              onClick={() => navigate(`${room.roomId}`)}
-            >
-              <ProfileImg
-                alt="profile-img"
-                src={require(`../assets/${room.data.otherUserId}.png`)}
-              />
-              <div className="chat-data">
-                <span>{getUserNameById(room.data.otherUserId)}</span>
-                <p>{getCurLatestMessage(room.roomId)}</p>
-              </div>
-            </ChatsTab>
+            <>
+              <ChatsTab
+                key={room.roomId}
+                onClick={() => navigate(`${room.roomId}`)}
+              >
+                <ProfileImg
+                  alt="profile-img"
+                  src={require(`../assets/${room.data.otherUserId}.png`)}
+                />
+                <div className="chat-data">
+                  <span className="user-name">
+                    {getUserNameById(room.data.otherUserId)}
+                  </span>
+                  <p className="user-message">
+                    {getCurLatestMessage(room.roomId)}
+                  </p>
+                </div>
+              </ChatsTab>
+              <Seperate>
+                <hr style={{ width: '100%' }} />
+              </Seperate>
+            </>
           ))}
       </ChatsList>
       <NavBar />
@@ -74,33 +83,52 @@ const Wrapper = styled.main`
 `;
 
 const ProfileImg = styled.img`
-  width: 2rem;
-  height: 2rem;
+  width: 2.5rem;
+  height: 2.5rem;
   display: inline-block;
   border-radius: 50%;
 `;
 
 const ChatsList = styled.div`
   display: flex;
+
   flex-direction: column;
   width: 100%;
   height: 100%;
-  gap: 3rem;
+
+  overflow-y: auto;
 `;
 
 const ChatsTab = styled.div`
   display: flex;
-  width: 100%;
-  height: 5rem;
+  align-items: center;
+  max-width: 100%;
+  height: 3rem;
   gap: 1rem;
+  cursor: pointer;
+  padding: 1rem;
 
   &:hover {
-    background-color: grey;
+    background-color: lightgrey;
     color: white;
   }
 
   .chat-data {
     display: flex;
     flex-direction: column;
+
+    font-size: 1.3rem;
+
+    .user-name {
+      font-weight: 600;
+    }
+    .user-message {
+    }
   }
+`;
+
+const Seperate = styled.div`
+  width: 90%;
+  padding: 0.2rem;
+  margin: 0 auto 0 auto;
 `;

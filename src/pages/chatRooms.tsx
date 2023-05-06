@@ -1,7 +1,7 @@
 import Header from 'components/Header';
 import NavBar from 'components/NavBar';
 
-import { chatRooms, getLatestMessage, userGroup } from 'utils/atom';
+import { chatRooms, latestMessage, userGroup } from 'utils/atom';
 import { useRecoilValue } from 'recoil';
 import { useNavigate } from 'react-router-dom';
 
@@ -13,11 +13,11 @@ const ChatRooms = () => {
   const rooms = useRecoilValue(chatRooms);
 
   const curUserGroup = useRecoilValue(userGroup);
-  const lastestMessage = useRecoilValue(getLatestMessage);
+  const lastestMessage = useRecoilValue(latestMessage);
 
   const getCurLatestMessage = (roomId: number) =>
-    lastestMessage.find((latestMessage) => latestMessage.roomId === roomId)
-      ?.latestMessage;
+    lastestMessage.find((latestMessage) => latestMessage.roomId === roomId)!
+      .latestMessage;
 
   const getUserNameById = (userId: number) => {
     const name = curUserGroup.find((user) => user.userId === userId)?.name;
@@ -44,7 +44,7 @@ const ChatRooms = () => {
                     {getUserNameById(room.data.otherUserId)}
                   </span>
                   <p className="user-message">
-                    {getCurLatestMessage(room.roomId)}
+                    {getCurLatestMessage(room.roomId).data}
                   </p>
                 </div>
               </ChatsTab>

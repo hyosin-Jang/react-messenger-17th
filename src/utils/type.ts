@@ -10,10 +10,10 @@ export interface ChatMessageType {
   timestamp: string;
 }
 
+// chatRooms 타입 하나 더 만들기
 export interface ChatRoomType {
   roomId: number;
-  data: any;
-  //data: ChatRoomInfoType[];
+  data: ChatRoomInfoType;
 }
 
 export interface ChatRoomInfoType {

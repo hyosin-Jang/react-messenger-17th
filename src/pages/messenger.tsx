@@ -33,8 +33,10 @@ const Messenger = () => {
   const room = Number(roomId);
 
   // roomId를 통해 현재 유저 id와 상대 유저 id 가지고 오기
-  const curUserId = useRecoilValue(chatRoomCurUserIdSelector(room));
-  const otherUserId = useRecoilValue(chatRoomOtherUserIdSelector(room));
+  const curUserId = useRecoilValue(chatRoomCurUserIdSelector({ roomId: room }));
+  const otherUserId = useRecoilValue(
+    chatRoomOtherUserIdSelector({ roomId: room })
+  );
 
   // roomId를 통해 현재 방 채팅 정보 가지고 오기
   const [messageStorage, setMessageStorage] = useRecoilState<ChatMessageType[]>(

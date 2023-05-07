@@ -1,4 +1,9 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from 'react-router-dom';
 import Friends from 'pages/friends';
 import ChatRooms from 'pages/chatRooms';
 import Messenger from 'pages/messenger';
@@ -14,6 +19,7 @@ const MessengerRouter = () => {
         <Route path="/chats" element={<ChatRooms />} />
         <Route path="/chats/:roomId" element={<Messenger />} />
         <Route path="/settings" element={<Settings />} />
+        <Route path="/*" element={<Navigate replace to="/" />} />
       </Routes>
     </Router>
   );

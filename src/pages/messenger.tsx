@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback, ChangeEvent, useEffect } from 'react';
+import { useRef, useEffect } from 'react';
 
 // components
 import ToggleSwitch from 'components/ToggleSwitch';
@@ -6,7 +6,7 @@ import Header from 'components/Header';
 
 // utils
 import useInput from 'hooks/useInput';
-import { useRecoilValue, useRecoilState } from 'recoil';
+import { useRecoilValue, useRecoilState, useSetRecoilState } from 'recoil';
 import {
   userGroup,
   chatRoomCurUserIdSelector,
@@ -42,7 +42,7 @@ const Messenger = () => {
   const [messageStorage, setMessageStorage] = useRecoilState<ChatMessageType[]>(
     chatRoomMessagesSelector({ roomId: room })
   );
-  const [toggleUser, setToggleUser] = useRecoilState<ChatRoomInfoType>(
+  const setToggleUser = useSetRecoilState<ChatRoomInfoType>(
     toggleUserId({ roomId: room })
   );
 
@@ -60,9 +60,9 @@ const Messenger = () => {
     scrollToBottom();
   }, [messageStorage]);
 
-  const resetInput = (e: any) => {
+  const resetInput = (e: React.FormEvent<HTMLFormElement>) => {
     input.setValue('');
-    e.target.reset();
+    (e.target as HTMLFormElement).reset();
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -85,8 +85,8 @@ const Messenger = () => {
     return name;
   };
 
-  const saveToJson = (e: any) => {
-    e.preventDefault();
+  const saveToJson = () => {
+    //  e.preventDefault();
 
     const userState = curUserGroup.find((item) => item.userId === curUserId);
     const otherUserState = curUserGroup.find(
@@ -105,7 +105,7 @@ const Messenger = () => {
     link.click();
   };
 
-  const handleUserToggle = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleUserToggle = () => {
     const newUserId: ChatRoomInfoType = {
       curUserId: otherUserId,
       otherUserId: curUserId,

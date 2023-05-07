@@ -1,27 +1,25 @@
 import { useState } from 'react';
 import Header from 'components/Header';
+import NavBar from 'components/NavBar';
+
 import styled from 'styled-components';
 import { flexCenter } from 'styles/theme';
-import { userGroup } from 'utils/atom';
-import { useRecoilValue } from 'recoil';
-import NavBar from 'components/NavBar';
 import Search from 'assets/icon-search.png';
+
+import useInput from 'hooks/useInput';
+import { userGroup } from 'utils/atom';
+import { setSearchFilter } from 'utils/index';
+import { useRecoilValue } from 'recoil';
 
 const Friends = () => {
   const users = useRecoilValue(userGroup);
+  const searchTerm = useInput('');
+
+  const me = users.filter((user) => user.userId === 0);
 
   const [searchToggle, setSearchToggle] = useState(false);
-  const [searchTerm, setSearchTerm] = useState('');
+  const handleSearch = () => setSearchToggle((prev) => !prev);
 
-  const handleSearch = (e: any) => {
-    e.preventDefault();
-    setSearchToggle((prev) => !prev);
-  };
-
-  const handleValue = (e: any) => {
-    e.preventDefault();
-    setSearchTerm(e.target.value.trim());
-  };
   return (
     <Wrapper>
       <Header title="Profiles">
@@ -31,7 +29,11 @@ const Friends = () => {
       </Header>
       {searchToggle && (
         <InputWrapper>
-          {<input onChange={handleValue} placeholder="검색어 입력" autoFocus />}
+          <input
+            onChange={searchTerm.onChange}
+            placeholder="검색어 입력"
+            autoFocus
+          />
         </InputWrapper>
       )}
       <Seperate>
@@ -39,21 +41,19 @@ const Friends = () => {
         <hr style={{ width: '100%' }} />
       </Seperate>
 
-      {users &&
-        users
-          .filter((user) => user.userId === 0)
-          .map((user) => (
-            <FriendsTab key={user.userId} className="friend-tab">
-              <ProfileImg
-                alt="profile-img"
-                src={require(`../assets/${user.userId}.png`)}
-              />
-              <div className="friend-data">
-                <span className="friend-name">{user.name}</span>
-                <span className="friend-status">{user.statusMessage}</span>
-              </div>
-            </FriendsTab>
-          ))}
+      {me &&
+        me.map((user) => (
+          <FriendsTab key={user.userId} className="friend-tab">
+            <ProfileImg
+              alt="profile-img"
+              src={require(`../assets/${user.userId}.png`)}
+            />
+            <div className="friend-data">
+              <span className="friend-name">{user.name}</span>
+              <span className="friend-status">{user.statusMessage}</span>
+            </div>
+          </FriendsTab>
+        ))}
       <Seperate>
         <div>Friends</div>
         <hr style={{ width: '100%' }} />
@@ -62,15 +62,7 @@ const Friends = () => {
         {users &&
           users
             .filter((user) => user.userId !== 0)
-            .filter((user) => {
-              if (searchTerm === '') {
-                return user;
-              } else if (
-                user.name.toLowerCase().includes(searchTerm.toLowerCase())
-              ) {
-                return user;
-              }
-            })
+            .filter((user) => setSearchFilter(searchTerm.value, user))
             .map((user) => (
               <FriendsTab key={user.userId}>
                 <ProfileImg
@@ -161,10 +153,8 @@ const ProfileImg = styled.img`
 const FriendsList = styled.div`
   display: flex;
   flex-direction: column;
-
   width: 100%;
   height: 100%;
-
   overflow-y: auto;
 `;
 

@@ -1,6 +1,5 @@
 import { createGlobalStyle } from 'styled-components';
 import { normalize } from 'styled-normalize';
-import { theme } from './theme';
 
 export const GlobalStyle = createGlobalStyle`
 ${normalize}
@@ -40,6 +39,34 @@ button{
    cursor: pointer;
    &:focus{
       outline: none;
+   }
+}
+
+.chat-rows {
+   display: flex;
+   align-items: center;
+   max-width: 100%;
+   height: 3rem;
+   gap: 1rem;
+   cursor: pointer;
+   padding: 1.1rem;
+ 
+   &:hover {
+     background-color: grey;
+     color: white;
+   }
+
+   .chat-data {
+     display: flex;
+     flex-direction: column;
+     font-size: 1.3rem;
+ 
+     .user-name {
+       font-weight: 600;
+     }
+     .user-message {
+       height: 1rem;
+     }
    }
 }
 `;

@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback, ChangeEvent, useEffect } from 'react';
+import { useRef, useEffect } from 'react';
 
 // components
 import ToggleSwitch from 'components/ToggleSwitch';
@@ -6,7 +6,7 @@ import Header from 'components/Header';
 
 // utils
 import useInput from 'hooks/useInput';
-import { useRecoilValue, useRecoilState } from 'recoil';
+import { useRecoilValue, useRecoilState, useSetRecoilState } from 'recoil';
 import {
   userGroup,
   chatRoomCurUserIdSelector,
@@ -19,7 +19,7 @@ import { ChatMessageType, ChatRoomInfoType } from 'utils/type';
 
 // style
 import styled from 'styled-components';
-import { flexCenter } from 'styles/theme';
+import { backgroundShape, flexCenter } from 'styles/theme';
 import Send from 'assets/icon-send.png';
 import Save from 'assets/icon-save.png';
 import { theme } from 'styles/theme';
@@ -29,18 +29,19 @@ import { useParams } from 'react-router-dom';
 const JSON_FILENAME = 'chatting_info.json';
 
 const Messenger = () => {
-  let { roomId } = useParams();
-  const room = Number(roomId);
+  let room = parseInt(useParams().roomId ?? '0');
 
   // roomId를 통해 현재 유저 id와 상대 유저 id 가지고 오기
-  const curUserId = useRecoilValue(chatRoomCurUserIdSelector(room));
-  const otherUserId = useRecoilValue(chatRoomOtherUserIdSelector(room));
+  const curUserId = useRecoilValue(chatRoomCurUserIdSelector({ roomId: room }));
+  const otherUserId = useRecoilValue(
+    chatRoomOtherUserIdSelector({ roomId: room })
+  );
 
   // roomId를 통해 현재 방 채팅 정보 가지고 오기
   const [messageStorage, setMessageStorage] = useRecoilState<ChatMessageType[]>(
     chatRoomMessagesSelector({ roomId: room })
   );
-  const [toggleUser, setToggleUser] = useRecoilState<ChatRoomInfoType>(
+  const setToggleUser = useSetRecoilState<ChatRoomInfoType>(
     toggleUserId({ roomId: room })
   );
 
@@ -58,9 +59,9 @@ const Messenger = () => {
     scrollToBottom();
   }, [messageStorage]);
 
-  const resetInput = (e: any) => {
+  const resetInput = (e: React.FormEvent<HTMLFormElement>) => {
     input.setValue('');
-    e.target.reset();
+    (e.target as HTMLFormElement).reset();
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -83,9 +84,7 @@ const Messenger = () => {
     return name;
   };
 
-  const saveToJson = (e: any) => {
-    e.preventDefault();
-
+  const saveToJson = () => {
     const userState = curUserGroup.find((item) => item.userId === curUserId);
     const otherUserState = curUserGroup.find(
       (item) => item.userId === otherUserId
@@ -103,7 +102,7 @@ const Messenger = () => {
     link.click();
   };
 
-  const handleUserToggle = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleUserToggle = () => {
     const newUserId: ChatRoomInfoType = {
       curUserId: otherUserId,
       otherUserId: curUserId,
@@ -166,23 +165,7 @@ export default Messenger;
 
 const Wrapper = styled.main`
   ${flexCenter}
-  flex-direction: column;
-  width: 30rem;
-  height: 50rem;
-  border-radius: 2rem;
-  background: radial-gradient(
-      178.94% 106.41% at 26.42% 106.41%,
-      #fff7b1 0%,
-      rgba(255, 255, 255, 0) 71.88%
-    )
-    #ffffff;
-
-  box-shadow: 0px 155px 62px rgba(0, 0, 0, 0.01),
-    0px 87px 52px rgba(0, 0, 0, 0.05), 0px 39px 39px rgba(0, 0, 0, 0.09),
-    0px 10px 21px rgba(0, 0, 0, 0.1), 0px 0px 0px rgba(0, 0, 0, 0.1);
-
-  border-radius: 23px;
-  transition: all 0.8s cubic-bezier(0.15, 0.83, 0.66, 1);
+  ${backgroundShape}
 `;
 
 const Icon = styled.img`

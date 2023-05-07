@@ -29,8 +29,7 @@ import { useParams } from 'react-router-dom';
 const JSON_FILENAME = 'chatting_info.json';
 
 const Messenger = () => {
-  let { roomId } = useParams();
-  const room = Number(roomId);
+  let room = parseInt(useParams().roomId ?? '0');
 
   // roomId를 통해 현재 유저 id와 상대 유저 id 가지고 오기
   const curUserId = useRecoilValue(chatRoomCurUserIdSelector({ roomId: room }));
@@ -86,8 +85,6 @@ const Messenger = () => {
   };
 
   const saveToJson = () => {
-    //  e.preventDefault();
-
     const userState = curUserGroup.find((item) => item.userId === curUserId);
     const otherUserState = curUserGroup.find(
       (item) => item.userId === otherUserId
